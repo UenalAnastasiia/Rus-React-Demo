@@ -3,30 +3,29 @@ import './styles/App.css';
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/modal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
 
 function App() {
   const [posts, setPosts] = useState([
     { id: 1, title: 'ddd', body: 'ddd' },
     { id: 2, title: 'aaa', body: 'bbb' },
     { id: 3, title: 'fff', body: 'aaaa' }
-    // { id: 1, title: 'Javascript 1', body: 'Description 1' },
-    // { id: 2, title: 'Javascript 2', body: 'Description 2' },
-    // { id: 3, title: 'Javascript 3', body: 'Description 3' }
   ]);
 
   const [filter, setFilter] = useState({
     sort: '', query: ''
   });
 
+  const [modal, setModal] = useState(false);
+
 
   const sortedPosts = useMemo(() => {
-    console.log('Sorted Function worked');
     if (filter.sort) {
       return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
     }
     return posts;
   }, [filter.sort, posts]);
-
 
 
   const sortedAndSearchedPosts = useMemo(() => {
@@ -36,6 +35,7 @@ function App() {
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   }
 
 
@@ -46,9 +46,15 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm
-        create={createPost} />
-        
+      <MyButton style={{marginTop: '30px'}}
+        onClick={() => setModal(true)}>
+        Post erstellen
+      </MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <PostForm
+          create={createPost} />
+      </MyModal>
+
       <hr style={{ margin: '15px 0' }} />
 
       <PostFilter
