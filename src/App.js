@@ -3,6 +3,7 @@ import './styles/App.css';
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import MySelect from "./components/UI/select/MySelect";
+import MyInput from "./components/UI/input/MyInput";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -14,6 +15,18 @@ function App() {
     // { id: 3, title: 'Javascript 3', body: 'Description 3' }
   ]);
   const [selectedSort, setSelectedSort] = useState('');
+  const [searchQuary, setSearchQuary] = useState('');
+
+
+  const getSortedPosts = (e) => {
+    console.log('Sorted Function worked');
+    if (selectedSort) {
+      return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]));
+    }
+    return posts;
+  }
+
+  const sortedPosts = getSortedPosts();
 
 
   const createPost = (newPost) => {
@@ -28,7 +41,6 @@ function App() {
 
   const sortPosts = (sort) => {
     setSelectedSort(sort);
-    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
   }
 
 
@@ -38,6 +50,11 @@ function App() {
       <hr style={{ margin: '15px 0' }} />
 
       <div>
+        <MyInput
+          value={searchQuary}
+          onChange={e => setSearchQuary(e.target.value) }
+          placeholder="Suche..." />
+
         <MySelect
           value={selectedSort}
           onChange={sortPosts}
@@ -50,7 +67,7 @@ function App() {
 
       {posts.length !== 0
         ?
-        <PostList posts={posts} remove={removePost} title="Posts über Javascript" />
+        <PostList posts={sortedPosts} remove={removePost} title="Posts über Javascript" />
         :
         <h1 style={{ textAlign: 'center' }}>Keine Posts vorhanden!</h1>
       }
