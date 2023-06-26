@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import './styles/App.css';
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
@@ -18,15 +18,13 @@ function App() {
   const [searchQuary, setSearchQuary] = useState('');
 
 
-  const getSortedPosts = (e) => {
+  const sortedPosts = useMemo(() => {
     console.log('Sorted Function worked');
     if (selectedSort) {
       return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]));
     }
     return posts;
-  }
-
-  const sortedPosts = getSortedPosts();
+  }, [selectedSort, posts]);
 
 
   const createPost = (newPost) => {
@@ -52,7 +50,7 @@ function App() {
       <div>
         <MyInput
           value={searchQuary}
-          onChange={e => setSearchQuary(e.target.value) }
+          onChange={e => setSearchQuary(e.target.value)}
           placeholder="Suche..." />
 
         <MySelect
