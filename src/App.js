@@ -11,28 +11,33 @@ function App() {
     { id: 3, title: 'Javascript 3', body: 'Description 3' }
   ])
   const [title, setTitle] = useState('');
-  const bodyInputRef = useRef();
+  const [body, setBody] = useState('');
 
   const addNewPost = (e) => {
     e.preventDefault();     // Stop page reload
-    console.log(title);
-    console.log(bodyInputRef.current.value);
+    const newPost = {
+      id: Date.now(),
+      title,
+      body
+    }
+    setPosts([...posts, newPost]);
+    setTitle('');
+    setBody('');
   }
 
 
   return (
     <div className="App">
       <form>
-        {/* controlled Input */}
         <MyInput
           value={title}
           onChange={e => setTitle(e.target.value)}
           type="text"
           placeholder="Post Title" />
 
-        {/* uncontrolled Input */}
         <MyInput
-          ref={bodyInputRef}
+          value={body}
+          onChange={e => setBody(e.target.value)}
           type="text"
           placeholder="Post Description" />
 
