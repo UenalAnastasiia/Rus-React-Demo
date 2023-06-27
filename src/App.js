@@ -7,12 +7,14 @@ import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 import { usePosts } from "./hooks/usePosts";
 import PostService from "./API/PostService";
+import Loader from "./components/UI/Loading/Loader";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: '', query: '' });
   const [modal, setModal] = useState(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
 
 
   useEffect(() => {
@@ -27,8 +29,12 @@ function App() {
 
 
   async function fetchPosts() {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    setIsPostsLoading(true);
+    setTimeout(async () => {
+      const posts = await PostService.getAll();
+      setPosts(posts);
+      setIsPostsLoading(false);
+    }, 1000);
   }
 
 
@@ -54,10 +60,17 @@ function App() {
         filter={filter}
         setFilter={setFilter} />
 
-      <PostList
-        posts={sortedAndSearchedPosts}
-        remove={removePost}
-        title="Posts über Javascript" />
+      {isPostsLoading
+        ?
+        <div style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
+          <Loader />
+        </div>
+        : 
+        <PostList
+          posts={sortedAndSearchedPosts}
+          remove={removePost}
+          title="Posts über Javascript" />
+      }
     </div>
   );
 }
