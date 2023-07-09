@@ -12,7 +12,7 @@ const AppRouter = () => {
     return (
         <Fragment>
             <Routes>
-                <Route path="/" element={<About />}></Route>
+                <Route path="/" element={<Posts />}></Route>
                 <Route path="/about" element={<About />}></Route>
                 <Route exact path="/posts" element={<Posts />}></Route>
                 <Route exact path="/posts/:id" element={<PostIdPage />}></Route>

@@ -7,13 +7,21 @@ import Loader from '../components/UI/Loading/Loader';
 const PostIdPage = () => {
     const params = useParams();
     const [post, setPost] = useState({});
+    const [comments, setComments] = useState([]);
+
     const [fetchPostById, isLoading, error] = useFetching(async (id) => {
         const response = await PostService.getById(id);
         setPost(response.data);
     });
 
+    const [fetchCommentsById, isComLoading, comError] = useFetching(async (id) => {
+        const response = await PostService.getCommentsByPostId(id);
+        setComments(response.data);
+    });
+
     useEffect(() => {
         fetchPostById(params.id)
+        fetchCommentsById(params.id)
     }, []);
 
     return (
@@ -23,6 +31,19 @@ const PostIdPage = () => {
                 ? <Loader />
                 : <div>
                     {post.id}. {post.title}
+                </div>
+            }
+
+            <h1>Comments</h1>
+            {isComLoading
+                ? <Loader />
+                : <div>
+                    {comments.map(comment => 
+                        <div key={comment.id} style={{marginTop: 15}}>
+                            <h5>{comment.email}</h5>
+                            <h5>{comment.body}</h5>
+                        </div>
+                )}
                 </div>
             }
         </div>
