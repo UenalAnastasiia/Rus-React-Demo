@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import {
-    Navigate,
     Route,
     Routes
 } from "react-router-dom";
 import { publicRoutes, privateRoutes } from '../router';
+import { AuthContext } from '../context';
 
 const AppRouter = () => {
-    const isAuth = false;
+    const { isAuth } = useContext(AuthContext);
+    console.log(isAuth);
 
     return (
         <Fragment>
@@ -15,7 +16,7 @@ const AppRouter = () => {
                 ?
                 <Routes>
                     {privateRoutes.map(route =>
-                        <Route key={route.element}
+                        <Route key={route.path}
                             element={<route.element />}
                             path={route.path}
                             exact={route.exact} />
