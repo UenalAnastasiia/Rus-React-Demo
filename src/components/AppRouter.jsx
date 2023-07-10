@@ -8,7 +8,6 @@ import { AuthContext } from '../context';
 
 const AppRouter = () => {
     const { isAuth } = useContext(AuthContext);
-    console.log(isAuth);
 
     return (
         <Fragment>
